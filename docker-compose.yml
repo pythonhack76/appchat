@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appchat
+    ports:
+      - "${PORT:-8000}:8000"
+    volumes:
+      - .:/var/www
+    environment:
+      - PORT=8000
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: appchat-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: appchat
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel
+
+volumes:
+  db_data: {}
+
+networks:
+  laravel:
